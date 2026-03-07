@@ -8,4 +8,5 @@ CREATE TABLE term_equivalences (
     observacao TEXT
 );
 
-CREATE INDEX idx_term_equivalences_termo ON term_equivalences (termo);
+CREATE INDEX idx_term_equivalences_termo 
+ON term_equivalences (termo);

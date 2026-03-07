@@ -1,3 +1,5 @@
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+
 CREATE TABLE products (
     id SERIAL PRIMARY KEY,
     sku TEXT UNIQUE NOT NULL,
@@ -10,5 +12,14 @@ CREATE TABLE products (
     criado_em TIMESTAMP DEFAULT NOW()
 );
 
-CREATE INDEX idx_products_texto_canonico ON products USING GIN (to_tsvector('simple', texto_canonico));
-CREATE INDEX idx_products_atributos ON products USING GIN (atributos);
+-- busca full text
+CREATE INDEX idx_products_texto_canonico 
+ON products USING GIN (to_tsvector('simple', texto_canonico));
+
+-- busca em JSON
+CREATE INDEX idx_products_atributos 
+ON products USING GIN (atributos);
+
+-- 🔹 novo índice trigram para ILIKE
+CREATE INDEX idx_products_texto_trgm 
+ON products USING GIN (texto_canonico gin_trgm_ops);
